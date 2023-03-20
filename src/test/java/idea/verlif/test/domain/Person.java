@@ -1,4 +1,6 @@
-package idea.verlif.test;
+package idea.verlif.test.domain;
+
+import idea.verlif.comparator.CompareField;
 
 import java.util.Date;
 
@@ -16,9 +18,13 @@ public class Person {
 
     private double height;
 
+    @CompareField("生日")
     private Date birthday;
 
     private FRUIT favouriteFruit;
+
+    @CompareField(deep = true)
+    private Pet pet;
 
     public String getName() {
         return name;
@@ -84,6 +90,14 @@ public class Person {
         this.favouriteFruit = favouriteFruit;
     }
 
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
     public enum FRUIT {
         APPLE("苹果"),
         ORANGE("橙子"),
@@ -97,6 +111,11 @@ public class Person {
         }
 
         public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
             return name;
         }
     }
