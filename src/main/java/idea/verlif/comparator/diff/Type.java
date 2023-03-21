@@ -14,6 +14,14 @@ public enum Type {
      */
     MODIFY_VALUE,
     /**
+     * 旧值为空
+     */
+    MODIFY_FILL,
+    /**
+     * 新值为空
+     */
+    MODIFY_NULL,
+    /**
      * 属性类型修改
      */
     MODIFY_TYPE,

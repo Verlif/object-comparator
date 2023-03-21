@@ -1,21 +1,45 @@
 package idea.verlif.comparator;
 
+import idea.verlif.comparator.diff.DiffValue;
 import idea.verlif.comparator.diff.Different;
 import idea.verlif.comparator.diff.Type;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
+/**
+ * 对比核心类
+ */
 public class CompareCore {
 
-    public static Different compare(Object old, Object now) {
+    private EqualJudge equalJudge;
+
+    public void setEqualJudge(EqualJudge equalJudge) {
+        this.equalJudge = equalJudge;
+    }
+
+    /**
+     * 对比两个对象
+     *
+     * @param old 源对象
+     * @param now 新对象
+     * @return 对比结果
+     */
+    public Different compare(Object old, Object now) {
         return compare(null, old, now);
     }
 
-    public static Different compare(String prefix, Object old, Object now) {
+    /**
+     * 对比两个对象
+     *
+     * @param prefix 对比前缀
+     * @param old    源对象
+     * @param now    新对象
+     * @return 对比结果
+     */
+    public Different compare(String prefix, Object old, Object now) {
         CompareObject oldC = new CompareObject(old);
         CompareObject nowC = new CompareObject(now);
         Set<String> nameList = calcNameList(oldC, nowC);
@@ -23,7 +47,7 @@ public class CompareCore {
         return compare(prefix, nameList, oldC, nowC);
     }
 
-    public static Different compare(String prefix, Set<String> nameList, CompareObject old, CompareObject now) {
+    public Different compare(String prefix, Set<String> nameList, CompareObject old, CompareObject now) {
         if (prefix == null) {
             prefix = "";
         }
@@ -33,7 +57,7 @@ public class CompareCore {
             Field oldF = old.getField(name);
             Field nowF = now.getField(name);
 
-            Different.DiffValue diffValue = compareValue(old, oldF, now, nowF);
+            DiffValue diffValue = compareValue(old, oldF, now, nowF);
             if (diffValue != null) {
                 diffValue.setName(prefix + diffValue.getName());
                 different.addDiffValue(diffValue);
@@ -53,7 +77,7 @@ public class CompareCore {
         return different;
     }
 
-    private static Set<String> calcNameList(CompareObject old, CompareObject now) {
+    private Set<String> calcNameList(CompareObject old, CompareObject now) {
         List<Field> oldFields = old.getComparableFieldList();
         List<Field> nowFields = now.getComparableFieldList();
 
@@ -67,11 +91,14 @@ public class CompareCore {
         return nameList;
     }
 
-    private static Different.DiffValue compareValue(CompareObject old, Field oldF, CompareObject now, Field nowF) {
+    private DiffValue compareValue(CompareObject old, Field oldF, CompareObject now, Field nowF) {
         if (oldF == null && nowF == null) {
             return null;
         }
-        Different.DiffValue diffValue = new Different.DiffValue();
+        if (equalJudge == null) {
+            equalJudge = new DefaultEqualJudge();
+        }
+        DiffValue diffValue = new DiffValue();
         diffValue.setOld(old.getValue(oldF));
         diffValue.setNow(now.getValue(nowF));
         if (oldF == null) {
@@ -83,17 +110,34 @@ public class CompareCore {
         } else {
             diffValue.setName(old.getFieldName(oldF));
             if (oldF.equals(nowF)) {
-                // 类型相同
-                if (Objects.deepEquals(diffValue.getOld(), diffValue.getNow())) {
-                    diffValue.setType(Type.NO);
-                } else {
-                    diffValue.setType(Type.MODIFY_VALUE);
-                }
+                diffValue.setType(equalJudge.equals(diffValue.getOld(), diffValue.getNow()));
             } else {
                 // 类型不同
                 diffValue.setType(Type.MODIFY_TYPE);
             }
         }
         return diffValue;
+    }
+
+    private static final class DefaultEqualJudge implements EqualJudge {
+
+        @Override
+        public Type equals(Object old, Object now) {
+            if (old == null) {
+                if (now == null) {
+                    return Type.NO;
+                } else {
+                    return Type.MODIFY_FILL;
+                }
+            }
+            if (now == null) {
+                return Type.MODIFY_NULL;
+            }
+            if (old.equals(now)) {
+                return Type.NO;
+            } else {
+                return Type.MODIFY_VALUE;
+            }
+        }
     }
 }
