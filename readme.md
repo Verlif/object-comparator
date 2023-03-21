@@ -36,9 +36,9 @@ List<DiffValue> changedValues = different.getChangedValues();
     type=MODIFY_FILL
   },
   {name='pet',
-    old=idea.verlif.test.domain.Pet@506e1b77,
-    now=null,
-    type=MODIFY_NULL
+    old=idea.verlif.test.domain.Pet@4fca772d,
+    now=idea.verlif.test.domain.Pet@9807454,
+    type=MODIFY_VALUE
   },
   {
     name='pet.name',
