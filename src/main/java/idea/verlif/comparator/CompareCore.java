@@ -5,19 +5,29 @@ import idea.verlif.comparator.diff.Different;
 import idea.verlif.comparator.diff.Type;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 对比核心类
  */
 public class CompareCore {
 
-    private EqualJudge equalJudge;
+    private final static EqualJudge<Object> EQUAL_JUDGE = new DefaultEqualJudge();
 
-    public void setEqualJudge(EqualJudge equalJudge) {
-        this.equalJudge = equalJudge;
+    private final Map<Class<?>, EqualJudge<?>> equalJudgeMap;
+
+    public CompareCore() {
+        equalJudgeMap = new HashMap<>();
+    }
+
+    /**
+     * 添加类型判断器
+     *
+     * @param target     目标类
+     * @param equalJudge 类值判断器
+     */
+    public <T> void addEqualJudge(Class<T> target, EqualJudge<T> equalJudge) {
+        equalJudgeMap.put(target, equalJudge);
     }
 
     /**
@@ -95,9 +105,6 @@ public class CompareCore {
         if (oldF == null && nowF == null) {
             return null;
         }
-        if (equalJudge == null) {
-            equalJudge = new DefaultEqualJudge();
-        }
         DiffValue diffValue = new DiffValue();
         diffValue.setOld(old.getValue(oldF));
         diffValue.setNow(now.getValue(nowF));
@@ -110,6 +117,12 @@ public class CompareCore {
         } else {
             diffValue.setName(old.getFieldName(oldF));
             if (oldF.equals(nowF)) {
+                Class<?> targetCla = oldF.getType();
+                EqualJudge<Object> equalJudge = (EqualJudge<Object>) equalJudgeMap.get(targetCla);
+                if (equalJudge == null) {
+                    equalJudge = EQUAL_JUDGE;
+                    equalJudgeMap.put(targetCla, equalJudge);
+                }
                 diffValue.setType(equalJudge.equals(diffValue.getOld(), diffValue.getNow()));
             } else {
                 // 类型不同
@@ -119,7 +132,7 @@ public class CompareCore {
         return diffValue;
     }
 
-    private static final class DefaultEqualJudge implements EqualJudge {
+    private static final class DefaultEqualJudge implements EqualJudge<Object> {
 
         @Override
         public Type equals(Object old, Object now) {

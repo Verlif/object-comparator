@@ -2,7 +2,7 @@ package idea.verlif.comparator;
 
 import idea.verlif.comparator.diff.Type;
 
-public interface EqualJudge {
+public interface EqualJudge<T> {
 
     /**
      * 对象是否相等
@@ -11,5 +11,5 @@ public interface EqualJudge {
      * @param now 目标对象
      * @return 源对象与目标对象是否相等
      */
-    Type equals(Object old, Object now);
+    Type equals(T old, T now);
 }
