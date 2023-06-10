@@ -7,6 +7,7 @@ import idea.verlif.test.domain.Person;
 import idea.verlif.test.domain.Pet;
 import idea.verlif.test.domain.Student;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,13 @@ public class Main {
         Student now = new Student();
         now.setBirthday(new Date());
         now.setPet(new Pet("小狗"));
+        List<String> list = new ArrayList<>();
+        list.add("123");
+        now.setNames(list);
         old.setPet(new Pet("小猫"));
+        List<String> list2 = new ArrayList<>();
+        list2.add("1234");
+        old.setNames(list2);
         CompareCore compareCore = new CompareCore();
         Different different = compareCore.compare(old, now);
         List<DiffValue> changedValues = different.getChangedValues();

@@ -3,6 +3,7 @@ package idea.verlif.test.domain;
 import idea.verlif.comparator.CompareField;
 
 import java.util.Date;
+import java.util.List;
 
 public class Person {
 
@@ -25,6 +26,8 @@ public class Person {
 
     @CompareField(deep = true)
     private Pet pet;
+
+    private List<String> names;
 
     public String getName() {
         return name;
@@ -96,6 +99,14 @@ public class Person {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public void setNames(List<String> names) {
+        this.names = names;
     }
 
     public enum FRUIT {

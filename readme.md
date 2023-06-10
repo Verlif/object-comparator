@@ -49,6 +49,8 @@ List<DiffValue> changedValues = different.getChangedValues();
 ]
 ```
 
+开发者也可以通过`CompareCore.addEqualJudge()`来添加对应类的判断方法。
+
 ## 说明
 
 通过`@CompareField`注解来控制属性是否被忽略或是否递归对比，在上述例子中的 __Pet__ 属性被标记了`@CompareField(deep = true)`，所以得到了`pet.name`的对比结果。
