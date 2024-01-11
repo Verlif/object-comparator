@@ -18,13 +18,13 @@
         <dependency>
             <groupId>com.github.Verlif</groupId>
             <artifactId>reflection-kit</artifactId>
-            <version>1.3.1</version>
+            <version>1.6</version>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>com.github.Verlif</groupId>
+            <artifactId>mock-data</artifactId>
+            <version>3.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

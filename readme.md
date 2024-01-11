@@ -1,7 +1,6 @@
 # ObjectComparator
 
-对象比对工具，用来对比两个对象的所有属性差别，可以是不同类。
-非常适合做数据版本对比。
+对象属性比对工具，用来对比两个对象的所有属性差别，可以是不同类的对象进行比较。
 
 ## 使用
 
@@ -35,7 +34,8 @@ List<DiffValue> changedValues = different.getChangedValues();
     now=Tue Mar 21 14:21:30 GMT+08:00 2023,
     type=MODIFY_FILL
   },
-  {name='pet',
+  {
+    name='pet',
     old=idea.verlif.test.domain.Pet@4fca772d,
     now=idea.verlif.test.domain.Pet@9807454,
     type=MODIFY_VALUE
