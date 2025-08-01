@@ -37,7 +37,7 @@ public class Different {
         if (prefix == null) {
             diffValues.add(diffValue);
         } else {
-            diffValue = diffValue.clone();
+            diffValue = diffValue.copy();
             diffValue.setName(prefix + diffValue.getName());
             diffValues.add(diffValue);
         }

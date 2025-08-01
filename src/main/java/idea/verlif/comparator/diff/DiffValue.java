@@ -1,7 +1,6 @@
 package idea.verlif.comparator.diff;
 
-
-public class DiffValue implements Cloneable {
+public class DiffValue {
 
     private String name;
 
@@ -10,6 +9,15 @@ public class DiffValue implements Cloneable {
     private Object now;
 
     private Type type;
+
+    public DiffValue copy() {
+        DiffValue diffValue = new DiffValue();
+        diffValue.name = this.name;
+        diffValue.type = this.type;
+        diffValue.old = this.old;
+        diffValue.now = this.now;
+        return diffValue;
+    }
 
     public String getName() {
         return name;
@@ -41,16 +49,6 @@ public class DiffValue implements Cloneable {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    @Override
-    public DiffValue clone() {
-        DiffValue diffValue = new DiffValue();
-        diffValue.name = this.name;
-        diffValue.type = this.type;
-        diffValue.old = this.old;
-        diffValue.now = this.now;
-        return diffValue;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class CompareObject {
                     nameList.add(getFieldName(field, compareField));
                     fieldList.add(field);
                     compareFieldList.add(compareField);
-                    valueList.add(FieldUtil.getFieldValue(target, field));
+                    valueList.add(FieldUtil.getFieldValue(target, field.getName()));
                 }
             } catch (NoSuchFieldException e) {
                 throw new RuntimeException(e);
@@ -45,15 +45,11 @@ public class CompareObject {
     }
 
     private String getFieldName(Field field, CompareField compareField) {
-        if (compareField == null || compareField.value().length() == 0) {
+        if (compareField == null || compareField.value().isEmpty()) {
             return field.getName();
         } else {
             return compareField.value();
         }
-    }
-
-    public List<Field> getFieldList() {
-        return fieldList;
     }
 
     public List<Field> getComparableFieldList() {
@@ -67,14 +63,6 @@ public class CompareObject {
             }
         }
         return comparableFieldList;
-    }
-
-    public Object getTarget() {
-        return target;
-    }
-
-    public Class<?> getTargetClass() {
-        return targetClass;
     }
 
     public String getFieldName(Field field) {
